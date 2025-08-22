@@ -609,41 +609,6 @@
             opacity: 1;
         }
 
-        /* Solução 2: Swipe Gesture Indicator */
-        .swipe-indicator {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            padding: 8px 20px;
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            opacity: 0;
-            transform: translateX(-50%) translateY(20px);
-            transition: all 0.4s ease;
-            z-index: 999;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .swipe-indicator.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-
-        .swipe-arrow {
-            animation: swipeAnimation 2s ease-in-out infinite;
-        }
-
-        @keyframes swipeAnimation {
-            0%, 100% { transform: translateX(0); }
-            50% { transform: translateX(10px); }
-        }
 
         /* Solução 3: Auto-advance mais sutil */
         .auto-progress {
@@ -1014,11 +979,6 @@
             </div>
         </section>
 
-        <!-- Swipe Indicator -->
-        <div class="swipe-indicator" id="swipeIndicator">
-            <span class="swipe-arrow">←</span>
-            Deslize para avançar
-        </div>
 
         <!-- Voice Indicator -->
         <div class="voice-indicator" id="voiceIndicator" onclick="toggleVoiceCommand()">
@@ -1328,9 +1288,6 @@
             const progressSection = document.querySelector('.progress-section');
             progressSection.classList.add('clickable');
             
-            // Mostrar indicador de swipe
-            const swipeIndicator = document.getElementById('swipeIndicator');
-            swipeIndicator.classList.add('show');
             
             // Card fica "pronto" para avançar
             const questionCard = document.querySelector('.question-card');
@@ -1351,8 +1308,6 @@
             const progressSection = document.querySelector('.progress-section');
             progressSection.classList.remove('clickable');
             
-            const swipeIndicator = document.getElementById('swipeIndicator');
-            swipeIndicator.classList.remove('show');
             
             const questionCard = document.querySelector('.question-card');
             questionCard.classList.remove('ready-to-advance');
