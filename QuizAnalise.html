@@ -992,10 +992,10 @@
             {
                 id: 0,
                 category: "IDENTIFICAÇÃO",
-                question: "Qual seu nome e o nome da sua empresa?",
+                question: "Qual é o nome da sua empresa e instagram?",
                 subtitle: "🔹 Para personalizar completamente sua análise.",
                 type: "text",
-                placeholder: "Ex: João Silva - Tech Solutions",
+                placeholder: "Ex: Tech Solutions - @techsolutions",
                 impact: "👉 Identificação para análise personalizada."
             },
             {
@@ -1070,29 +1070,17 @@
             },
             {
                 id: 6,
-                category: "VENDAS & FATURAMENTO",
-                question: "Hoje, em média, quantos leads e qual faturamento você gera?",
-                subtitle: "🔹 Essa resposta define seu potencial de crescimento.",
-                type: "double",
-                fieldA: {
-                    label: "Leads por mês",
-                    options: [
-                        { text: "Mais de 200", emoji: "🚀", score: 10, color: "#4ade80" },
-                        { text: "50-200", emoji: "💪", score: 7, color: "#60a5fa" },
-                        { text: "10-50", emoji: "📈", score: 4, color: "#f59e0b" },
-                        { text: "Menos de 10", emoji: "😢", score: 0, color: "#ef4444" }
-                    ]
-                },
-                fieldB: {
-                    label: "Faturamento mensal",
-                    options: [
-                        { text: "Mais de R$ 100.000", emoji: "💎", score: 15, color: "#4ade80" },
-                        { text: "R$ 50.000 - R$ 100.000", emoji: "🏆", score: 10, color: "#60a5fa" },
-                        { text: "R$ 20.000 - R$ 50.000", emoji: "📈", score: 5, color: "#f59e0b" },
-                        { text: "Menos de R$ 20.000", emoji: "🌱", score: 0, color: "#ef4444" }
-                    ]
-                },
-                impact: "👉 Combinação leads + faturamento revela eficiência comercial."
+                category: "LEADS E VENDAS",
+                question: "Quantos leads qualificados você gera por mês?",
+                subtitle: "🔹 Lead qualificado = pessoa interessada com potencial de compra real.",
+                type: "multiple",
+                options: [
+                    { text: "Mais de 200 leads", emoji: "🚀", score: 15, color: "#4ade80" },
+                    { text: "50-200 leads", emoji: "💪", score: 10, color: "#60a5fa" },
+                    { text: "10-50 leads", emoji: "📈", score: 6, color: "#f59e0b" },
+                    { text: "Menos de 10 leads", emoji: "😢", score: 0, color: "#ef4444" }
+                ],
+                impact: "👉 IA pode gerar 10x mais leads qualificados com mesmo orçamento."
             },
             {
                 id: 8,
@@ -1449,14 +1437,10 @@
                         <p style="margin-bottom: 30px; font-size: 1.2rem; opacity: 0.9;">
                             Baseado nas suas respostas, criamos um plano específico para você
                         </p>
-                        <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                        <div style="display: flex; justify-content: center;">
                             <a href="https://wa.me/556699301589?text=🔥 DIAGNÓSTICO DIGITAL COMPLETO%0A%0A👤 CLIENTE: ${nameAndCompany}%0A🏆 SCORE FINAL: ${totalScore}/100%0A⏱ Tempo: ${totalTime}s%0A%0A📊 RESPOSTAS DETALHADAS:%0A${detailedResponses}%0A🔴 PROBLEMA PRINCIPAL:%0A${businessProblem}%0A%0A🎯 OBJETIVO 90 DIAS:%0A${mainGoal}%0A%0A📩 QUERO MINHA ANÁLISE PERSONALIZADA!" 
-                               class="cta-button" style="background: white; color: #25D366;">
+                               class="cta-button" style="background: white; color: #25D366; width: 100%; max-width: 400px;">
                                 💬 FALAR AGORA NO WHATSAPP
-                            </a>
-                            <a href="https://calendly.com/seunegocio/consultoria-gratuita?score=${totalScore}&problem=${encodeURIComponent(businessProblem)}&goal=${encodeURIComponent(mainGoal)}" 
-                               class="cta-button" style="background: var(--cyber-gradient); color: white;">
-                                📅 AGENDAR CONSULTORIA GRATUITA
                             </a>
                         </div>
                     </div>
