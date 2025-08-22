@@ -723,8 +723,31 @@
             50% { transform: scale(1.1); }
         }
 
-        /* Remove o botão tradicional */
+        /* Botão tradicional */
         .next-button {
+            background: var(--success-gradient);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: var(--space-md) var(--space-lg);
+            font-size: var(--text-base);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            min-height: 44px;
+            margin-top: var(--space-md);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .next-button:hover,
+        .next-button:focus-visible {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(74, 222, 128, 0.4);
+        }
+
+        .next-button.hidden {
             display: none;
         }
 
@@ -1221,6 +1244,10 @@
                         <span class="impact-icon">💎</span>
                         <span>${question.impact}</span>
                     </div>
+                    
+                    <button class="next-button hidden" id="nextButton" onclick="nextQuestion()">
+                        PRÓXIMA PERGUNTA
+                    </button>
                 </div>
             `;
 
@@ -1291,6 +1318,9 @@
         function showAdvanceOptions() {
             canAdvance = true;
             
+            // Mostrar botão próxima pergunta
+            showNextButton();
+            
             // Ativar círculo de progresso como clicável
             const progressSection = document.querySelector('.progress-section');
             progressSection.classList.add('clickable');
@@ -1311,6 +1341,9 @@
 
         function hideAdvanceOptions() {
             canAdvance = false;
+            
+            // Ocultar botão próxima pergunta
+            hideNextButton();
             
             const progressSection = document.querySelector('.progress-section');
             progressSection.classList.remove('clickable');
@@ -1494,6 +1527,34 @@
                 }
             }, 200);
         }
+
+        function showNextButton() {
+            const nextButton = document.getElementById('nextButton');
+            if (nextButton) {
+                nextButton.classList.remove('hidden');
+            }
+        }
+
+        function hideNextButton() {
+            const nextButton = document.getElementById('nextButton');
+            if (nextButton) {
+                nextButton.classList.add('hidden');
+            }
+        }
+
+        function handleProgressClick() {
+            if (canAdvance) {
+                nextQuestion();
+            }
+        }
+
+        function toggleVoiceCommand() {
+            // Implementação básica do comando de voz
+            console.log('Voice command clicked');
+        }
+
+        // Variável para controlar se pode avançar
+        let canAdvance = false;
 
         function calculateResult() {
             if (totalScore >= 80) {
