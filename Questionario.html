@@ -1303,15 +1303,18 @@
                 // Parar auto-advance se estiver rodando
                 clearAutoAdvance();
                 
+                // Remover resposta anterior da mesma pergunta
+                responses = responses.filter(r => r.questionId !== questions[currentQuestion].id);
+                
                 responses.push({
                     questionId: questions[currentQuestion].id,
                     textResponse: value,
                     timestamp: Date.now() - startTime
                 });
                 
-                showNextButton();
+                showAdvanceOptions();
             } else {
-                hideNextButton();
+                hideAdvanceOptions();
             }
         }
 
@@ -1430,12 +1433,12 @@
             const textResponses = responses.filter(r => r.textResponse);
             const businessProblem = textResponses.find(r => r.questionId === 7)?.textResponse || 'Não informado';
             const mainGoal = textResponses.find(r => r.questionId === 8)?.textResponse || 'Crescimento acelerado';
-            const nameAndCompany = responses[0]?.textResponse || 'Não informado';
+            const nameAndCompany = textResponses.find(r => r.questionId === 0)?.textResponse || 'Não informado';
             
             // Compilar respostas para WhatsApp
             let detailedResponses = '';
-            questions.forEach((q, index) => {
-                const response = responses[index];
+            questions.forEach((q) => {
+                const response = responses.find(r => r.questionId === q.id);
                 if (response && q.id !== 0) {
                     if (q.type === 'multiple') {
                         const selectedOption = q.options[response.optionIndex];
