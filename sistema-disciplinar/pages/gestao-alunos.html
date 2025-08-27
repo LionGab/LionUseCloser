@@ -233,23 +233,78 @@
   <!-- Guard de Autenticação -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const wait = setInterval(() => {
-        if (window.localDb && window.localDb.loaded) {
-          clearInterval(wait);
-          try {
-            window.localAuth.onAuthStateChanged(user => {
-              if (!user) {
-                window.location.href = 'login.html';
-              } else {
-                console.log('Usuário logado:', user.email);
-                // A listagem em tempo real é automática via gestao.js
-              }
-            });
-          } catch (e) {
-            console.error('Erro ao iniciar auth guard:', e);
-          }
-        }
-      }, 100);
+      // Verifica autenticação via API
+      if (!window.apiClient.isAuthenticated()) {
+        window.location.href = 'login.html';
+        return;
+      }
+      
+      const user = window.apiClient.getUser();
+      if (user) {
+        console.log('Usuário logado:', user.email);
+        // Carrega dados via API
+        loadAlunos();
+      }
+    });
+    
+    async function loadAlunos() {
+      try {
+        const alunos = await window.apiClient.getAlunos();
+        console.log('Alunos carregados:', alunos);
+        renderAlunosTable(alunos);
+      } catch (error) {
+        console.error('Erro ao carregar alunos:', error);
+      }
+    }
+    
+    function renderAlunosTable(alunos) {
+      const tbody = document.getElementById('alunosTableBody');
+      if (!tbody) {
+        console.error('tbody não encontrado');
+        return;
+      }
+      
+      tbody.innerHTML = '';
+      alunos.forEach(aluno => {
+        const row = tbody.insertRow();
+        row.innerHTML = `
+          <td>${aluno.matricula || aluno.id}</td>
+          <td>${aluno.nome}</td>
+          <td>${aluno.turma}</td>
+          <td>${aluno.active ? 'Ativo' : 'Inativo'}</td>
+          <td>${aluno.responsavel_nome || '-'}</td>
+          <td>${aluno.responsavel_telefone || '-'}</td>
+          <td>-</td>
+          <td>
+            <button onclick="editAluno(${aluno.id})" class="btn-edit">✏️</button>
+            <button onclick="deleteAluno(${aluno.id})" class="btn-delete">🗑️</button>
+          </td>
+        `;
+      });
+      
+      // Atualizar contador
+      document.getElementById('totalAlunos').textContent = alunos.length;
+    }
+    
+    // Configurar formulário
+    document.getElementById('alunoForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      
+      const aluno = {
+        nome: formData.get('nome'),
+        turma: formData.get('turma'), 
+        matricula: formData.get('id')
+      };
+      
+      try {
+        await window.apiClient.createAluno(aluno);
+        window.showMessage('✅ Aluno cadastrado com sucesso!', 'success');
+        loadAlunos(); // Recarregar lista
+        e.target.reset(); // Limpar form
+      } catch (error) {
+        window.showMessage('❌ Erro ao cadastrar aluno: ' + error.message, 'error');
+      }
     });
   </script>
 
