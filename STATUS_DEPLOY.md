@@ -23,10 +23,8 @@
 **No Netlify Dashboard → Site settings → Environment variables:**
 
 ```
-DATABASE_URL = postgresql://neondb_owner:npg_k08jgBJNpbon@ep-white-mud-a5z48ztp-pooler.us-east-2.aws.neon.tech/neondb?sslmode=require
-
-JWT_SECRET = 902fe402aed86c65e3fc395a7d4525574eb552761918d6ef2fe3c7281f3b4213d026a8bd2211f6474e34840caf8fe7dc12302ef5d49dec18c5bc19ae29edf920
-
+DATABASE_URL = [SUA URL DO NEONDB]
+JWT_SECRET = [SUA JWT SECRET]
 JWT_EXPIRES_IN = 30d
 ```
 
