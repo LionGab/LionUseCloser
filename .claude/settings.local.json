@@ -4,7 +4,9 @@
       "Bash(python:*)",
       "Bash(git pull:*)",
       "Bash(git checkout:*)",
-      "Bash(git branch:*)"
+      "Bash(git branch:*)",
+      "Bash(echo $PORT)",
+      "Bash(PORT=8000 gunicorn -w 4 -b 0.0.0.0:8000 app:app)"
     ],
     "deny": [],
     "ask": []
