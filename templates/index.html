@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude Code Prompt Optimizer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1><i class="fas fa-robot"></i> Claude Code Prompt Optimizer</h1>
+            <p class="subtitle">Gere prompts otimizados para Claude Code CLI - 04/09/2025</p>
+            <div class="stats">
+                <span class="stat-item">
+                    <i class="fas fa-chart-line"></i>
+                    Total: {{ usage_stats.total_prompts }} prompts
+                </span>
+                <span class="stat-item">
+                    <i class="fas fa-fire"></i>
+                    Categorias: {{ usage_stats.categories|length }}
+                </span>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <!-- Seção de Geração de Prompt -->
+            <div class="section">
+                <h2><i class="fas fa-magic"></i> Gerar Prompt Otimizado</h2>
+                
+                <div class="form-group">
+                    <label for="category">Categoria:</label>
+                    <select id="category" onchange="loadTemplates()">
+                        <option value="">Selecione uma categoria...</option>
+                        {% for category_key, category_data in templates.items() %}
+                        <option value="{{ category_key }}">{{ category_data.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="template">Template:</label>
+                    <select id="template" onchange="loadTemplateInfo()" disabled>
+                        <option value="">Selecione um template...</option>
+                    </select>
+                </div>
+
+                <div id="template-info" class="template-info" style="display: none;">
+                    <h3>Informações do Template</h3>
+                    <p id="template-description"></p>
+                    <div id="template-variables"></div>
+                    <div id="template-examples"></div>
+                </div>
+
+                <div id="variables-form" class="variables-form" style="display: none;">
+                    <h3>Variáveis do Template</h3>
+                    <div id="variables-inputs"></div>
+                </div>
+
+                <div class="form-actions">
+                    <button id="generate-btn" onclick="generatePrompt()" disabled>
+                        <i class="fas fa-cogs"></i> Gerar Prompt
+                    </button>
+                    <button id="clear-btn" onclick="clearForm()">
+                        <i class="fas fa-eraser"></i> Limpar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Seção de Resultado -->
+            <div id="result-section" class="section" style="display: none;">
+                <h2><i class="fas fa-clipboard"></i> Prompt Gerado</h2>
+                <div class="result-container">
+                    <div class="result-header">
+                        <span id="result-template-name"></span>
+                        <button onclick="copyPrompt()" class="copy-btn">
+                            <i class="fas fa-copy"></i> Copiar
+                        </button>
+                    </div>
+                    <pre id="generated-prompt" class="prompt-output"></pre>
+                    <div id="result-metadata" class="metadata"></div>
+                </div>
+            </div>
+
+            <!-- Seção de Templates Populares -->
+            <div class="section">
+                <h2><i class="fas fa-star"></i> Templates Populares</h2>
+                <div class="popular-templates">
+                    {% for template in popular_templates %}
+                    <div class="template-card" onclick="loadPopularTemplate('{{ template.category }}', '{{ template.template_key }}')">
+                        <h4>{{ template.name }}</h4>
+                        <p>{{ template.description }}</p>
+                        <div class="template-meta">
+                            <span class="category">{{ template.category }}</span>
+                            <span class="usage">{{ template.usage_count }} usos</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Seção de Histórico -->
+            <div class="section">
+                <h2><i class="fas fa-history"></i> Últimos Prompts</h2>
+                <div class="history-list">
+                    {% for usage in usage_stats.last_used[:5] %}
+                    <div class="history-item" onclick="loadHistoryItem('{{ usage.category }}', '{{ usage.template }}', {{ usage.variables|tojson }})">
+                        <div class="history-header">
+                            <span class="template-name">{{ usage.template }}</span>
+                            <span class="timestamp">{{ usage.timestamp[:19] }}</span>
+                        </div>
+                        <div class="history-category">{{ usage.category }}</div>
+                        <div class="history-variables">
+                            {% for key, value in usage.variables.items() %}
+                            <span class="variable">{{ key }}: {{ value }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Seção de Ajuda -->
+            <div class="section">
+                <h2><i class="fas fa-question-circle"></i> Como Usar</h2>
+                <div class="help-content">
+                    <div class="help-item">
+                        <h4>1. Selecione uma Categoria</h4>
+                        <p>Escolha a categoria que melhor se adequa ao seu projeto: Desenvolvimento, Agronegócio, Deploy, ou Segurança.</p>
+                    </div>
+                    <div class="help-item">
+                        <h4>2. Escolha um Template</h4>
+                        <p>Selecione o template específico para sua necessidade. Cada template é otimizado com as melhores práticas.</p>
+                    </div>
+                    <div class="help-item">
+                        <h4>3. Preencha as Variáveis</h4>
+                        <p>Complete as variáveis necessárias. Use os exemplos como referência para valores apropriados.</p>
+                    </div>
+                    <div class="help-item">
+                        <h4>4. Gere e Copie</h4>
+                        <p>Clique em "Gerar Prompt" e copie o resultado para usar no Claude Code CLI.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>Claude Code Prompt Optimizer - Versão 1.0 - 04/09/2025</p>
+            <p>Baseado nas melhores práticas P→E→V→R e RA (Response Awareness)</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
+
