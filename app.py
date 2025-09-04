@@ -5,13 +5,13 @@ Gera prompts otimizados para Claude Code CLI baseado em melhores práticas
 Data: 04/09/2025
 """
 
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_from_directory
 import json
 import os
 from datetime import datetime
 from typing import Dict, List, Any
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static', static_folder='static')
 
 class PromptOptimizer:
     """Otimizador de prompts para Claude Code CLI"""
@@ -287,6 +287,12 @@ def get_examples(category, template_key):
         "examples": template_data.get("examples", []),
         "variables": template_data.get("variables", [])
     })
+
+@app.route('/static/<path:filename>')
+def serve_static(filename):
+    """Servir arquivos estáticos explicitamente"""
+    static_dir = os.path.join(os.path.dirname(__file__), 'static')
+    return send_from_directory(static_dir, filename)
 
 if __name__ == '__main__':
     # Criar diretório de dados se não existir
