@@ -1,0 +1,16 @@
+# Claude Code Prompt Optimizer - Dependências
+# App pessoal para gerar prompts otimizados Claude Code CLI
+
+# Framework web
+Flask==2.3.3
+Werkzeug==2.3.7
+
+# Utilitários
+python-dateutil==2.8.2
+
+# Desenvolvimento (opcional)
+python-dotenv==1.0.0
+
+# Servidor WSGI para produção (opcional)
+gunicorn==21.2.0
+
